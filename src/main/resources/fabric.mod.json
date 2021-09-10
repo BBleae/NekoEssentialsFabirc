@@ -1,38 +1,35 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "neko-essentials",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Neko Essentials (Fabirc)",
+  "description": "NekoEssentials in Fabric",
   "authors": [
-    "Me!"
+    "QiroNT"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://neko-craft.com/",
+    "sources": ""
   },
-
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
+    "server": [
+      "studio.baka.neko.essentials.NekoEssentials"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "neko-essentials.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric": "*",
     "minecraft": "1.17.x",
-    "java": ">=16"
+    "java": ">=16",
+    "luckperms": ">=5.3"
   },
   "suggests": {
-    "another-mod": "*"
   }
 }

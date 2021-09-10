@@ -1,12 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.fabricmc.example.mixin",
+  "package": "studio.baka.neko.essentials.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "MixinServerPlayerEntity"
   ],
   "client": [
-    "ExampleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
