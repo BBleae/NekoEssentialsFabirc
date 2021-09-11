@@ -8,18 +8,22 @@ import net.minecraft.text.Text;
 import studio.baka.neko.essentials.mixinInterfaces.IMixinServerPlayerEntity;
 import studio.baka.neko.essentials.utils.SavedLocation;
 
+import static studio.baka.neko.essentials.NekoEssentials.logger;
+
 public class SethomeCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("sethome").executes((context) -> {
-            return execute(context.getSource(), context.getSource().getPlayer());
-        }));
+        dispatcher.register(CommandManager.literal("sethome")
+                .executes((context) -> execute(context.getSource(), context.getSource().getPlayer())));
     }
 
     private static int execute(ServerCommandSource source, ServerPlayerEntity player) {
-        String world = player.world.getRegistryKey().getValue().toString();
-        SavedLocation loc = new SavedLocation(world, player.getBlockX(), player.getBlockY(), player.getBlockZ(), player.getYaw(), player.getPitch());
+        String world = player.getServerWorld().getRegistryKey().getValue().toString();
+        SavedLocation loc = new SavedLocation(world,
+                player.getX(), player.getY(), player.getZ(),
+                player.getYaw(), player.getPitch());
+        logger.debug(String.format("[home][set] %s -> %s", player.getName().asString(), loc.asFullString()));
         ((IMixinServerPlayerEntity) player).setHomeLocation(loc);
-        source.sendFeedback(Text.of("hi!"), true);
+        source.sendFeedback(Text.of("已成功在 " + loc.asString() + " 处设置家"), false);
         return 0;
     }
 }
