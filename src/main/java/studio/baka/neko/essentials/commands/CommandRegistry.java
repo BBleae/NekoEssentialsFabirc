@@ -10,5 +10,6 @@ public class CommandRegistry {
         TpaCommand.register(dispatcher);
         TpacceptCommand.register(dispatcher);
         TpadenyCommand.register(dispatcher);
+        HeadCommand.register(dispatcher);
     }
 }
