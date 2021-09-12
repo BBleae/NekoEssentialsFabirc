@@ -1,15 +1,22 @@
 package studio.baka.neko.essentials;
 
 import com.mojang.brigadier.CommandDispatcher;
+import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import studio.baka.neko.essentials.commands.CommandRegistry;
@@ -34,6 +41,7 @@ public class NekoEssentials implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPING.register(this::onServerStopping);
         CommandRegistrationCallback.EVENT.register(this::onCommandRegistering);
+        ServerTickEvents.END_SERVER_TICK.register(this::onEndTick);
 
         logger.debug("NekoEssentials initialized");
     }
@@ -53,5 +61,23 @@ public class NekoEssentials implements DedicatedServerModInitializer {
         logger.trace("onCommandRegistering");
 
         CommandRegistry.register(dispatcher);
+    }
+
+    private void onEndTick(MinecraftServer server) {
+        if (server.getTicks() % 64 == 0) {
+            String message = "§bNekoCraft§r";
+            switch (server.getTicks() / 64 % 2) {
+                case 0 -> {
+                    ServerWorld overworld = server.getWorld(World.OVERWORLD);
+                    if (overworld != null)
+                        message = "§b正在经历第" + overworld.getLevelProperties().getTime() + "个tick的NekoCraft§r";
+                }
+                case 1 -> message = "§b正在与" + server.getPlayerManager().getCurrentPlayerCount() + "只猫猫玩耍的NekoCraft§r";
+            }
+            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                player.networkHandler.sendPacket(new CustomPayloadS2CPacket(CustomPayloadS2CPacket.BRAND,
+                        new PacketByteBuf(Unpooled.buffer()).writeString(message)));
+            }
+        }
     }
 }
