@@ -37,7 +37,7 @@ public class HomeCommand {
         if (serverWorld == null) {
             throw INVALID_DIMENSION_EXCEPTION.create(loc.world);
         }
-        logger.debug(String.format("[home][teleport] %s -> %s", player.getName().asString(), loc.asFullString()));
+        logger.info(String.format("[home][teleport] %s -> %s", player, loc.asFullString()));
         player.teleport(serverWorld, loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
         source.sendFeedback(Text.of("已传送到家"), false);
         return 0;

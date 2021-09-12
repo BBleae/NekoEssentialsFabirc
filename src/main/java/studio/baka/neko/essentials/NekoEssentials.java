@@ -1,6 +1,8 @@
 package studio.baka.neko.essentials;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -11,14 +13,22 @@ import net.minecraft.server.command.ServerCommandSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import studio.baka.neko.essentials.commands.CommandRegistry;
+import studio.baka.neko.essentials.config.NekoConfig;
+import studio.baka.neko.essentials.config.NekoConfigParsed;
 
 public class NekoEssentials implements DedicatedServerModInitializer {
     public static final Logger logger = LogManager.getLogger("NekoEssentials");
+    public static NekoConfig rawConfig;
     public LuckPerms luckPermsApi;
 
     @Override
     public void onInitializeServer() {
         logger.trace("onInitializeServer");
+
+        logger.debug("registering configs");
+        AutoConfig.register(NekoConfig.class, GsonConfigSerializer::new);
+        rawConfig = AutoConfig.getConfigHolder(NekoConfig.class).getConfig();
+        NekoConfigParsed.load(rawConfig);
 
         logger.debug("registering event listeners");
         ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);

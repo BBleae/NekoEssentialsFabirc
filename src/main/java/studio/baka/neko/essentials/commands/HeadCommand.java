@@ -16,6 +16,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import static studio.baka.neko.essentials.NekoEssentials.logger;
+
 public class HeadCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("head")
@@ -31,6 +33,7 @@ public class HeadCommand {
         nbt.putString("SkullOwner", profile.getName());
         ItemStackArgument item = new ItemStackArgument(Registry.ITEM.get(new Identifier("minecraft:player_head")), nbt);
         ItemStack itemStack = item.createStack(1, false);
+        logger.info(String.format("[head] %s with %s's skull", player, profile.getName()));
         boolean bl = player.getInventory().insertStack(itemStack);
         if (bl && itemStack.isEmpty()) {
             itemStack.setCount(1);
@@ -38,7 +41,6 @@ public class HeadCommand {
             if (itemEntity != null) {
                 itemEntity.setDespawnImmediately();
             }
-
             player.world.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
                     ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);

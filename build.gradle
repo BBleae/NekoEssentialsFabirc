@@ -1,4 +1,5 @@
 plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
     id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'maven-publish'
 }
@@ -17,6 +18,13 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     mavenCentral()
+    maven { url "https://maven.shedaniel.me/" }
+    maven {
+        url "https://maven.terraformersmc.com/releases/"
+        content {
+            includeGroup "com.terraformersmc"
+        }
+    }
 }
 
 dependencies {
@@ -27,12 +35,19 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30"
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 
+    modImplementation "com.terraformersmc:modmenu:2.0.10"
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
     modImplementation files("libs/fabric-permissions-api-v0.1.jar")
     modImplementation files("libs/LuckPerms-Fabric-5.3.65.jar")
+    modImplementation files("libs/ledger-1.0.2.jar")
 
     modCompileOnly "net.luckperms:api:5.3"
 }

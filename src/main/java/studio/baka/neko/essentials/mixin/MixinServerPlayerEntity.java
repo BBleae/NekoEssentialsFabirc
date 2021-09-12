@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
@@ -76,9 +77,9 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
                 tpaReqds.remove(n.to);
                 ServerPlayerEntity to = this.getServerWorld().getServer().getPlayerManager().getPlayer(n.to);
                 if (to != null) {
-                    logger.debug(String.format("[tpa][timeout] %s -> %s", this.getName().asString(), to.getName().asString()));
-                    this.sendSystemMessage(Text.of("发向 " + to.getName().asString() + " 的 TPA 请求已超时"), Util.NIL_UUID);
-                    to.sendSystemMessage(Text.of("来自 " + to.getName().asString() + " 的 TPA 请求已超时"), Util.NIL_UUID);
+                    logger.info(String.format("[tpa][timeout] %s -> %s", this, to));
+                    this.sendSystemMessage(new LiteralText("发向 ").append(to.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
+                    to.sendSystemMessage(new LiteralText("来自 ").append(this.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
                 }
             }
         }

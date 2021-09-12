@@ -51,10 +51,10 @@ public class TpacceptCommand {
                 if (from == null) {
                     reqs.remove(req.from);
                 } else {
-                    accepts.add(Texts.bracketed(new LiteralText(from.getName().asString()).styled(style -> style
+                    accepts.add(Texts.bracketed(new LiteralText("").append(from.getDisplayName())).styled(style -> style
                             .withColor(Formatting.AQUA)
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("/tpaccept " + from.getName().asString())))
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + from.getName().asString())))));
+                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + from.getName().asString()))));
                 }
             }
             msg.append(Texts.join(accepts, Text.of(", ")));
@@ -75,12 +75,12 @@ public class TpacceptCommand {
     private static int execute(ServerCommandSource source, ServerPlayerEntity player, ServerPlayerEntity target) throws CommandSyntaxException {
         TpaRequest req = ((IMixinServerPlayerEntity) player).getTpaReqs().get(target.getUuid());
         if (req == null) {
-            throw NO_TPA_FROM_EXCEPTION.create(target.getName().asString());
+            throw NO_TPA_FROM_EXCEPTION.create(target.getDisplayName().asString());
         }
-        logger.debug(String.format("[tpa][accept] %s -> %s", target.getName().asString(), player.getName().asString()));
+        logger.info(String.format("[tpa][accept] %s -> %s", target, player));
         req.execute();
-        target.sendSystemMessage(Text.of("发送到 " + player.getName().asString() + " 的传送请求已被接受"), Util.NIL_UUID);
-        source.sendFeedback(Text.of("已接受来自 " + target.getName().asString() + " 的传送请求"), false);
+        target.sendSystemMessage(new LiteralText("发送到 ").append(player.getDisplayName()).append(Text.of(" 的传送请求已被接受")), Util.NIL_UUID);
+        source.sendFeedback(new LiteralText("已接受来自 ").append(target.getDisplayName()).append(Text.of(" 的传送请求")), false);
         return 0;
     }
 }

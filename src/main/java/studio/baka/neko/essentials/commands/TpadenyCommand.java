@@ -51,7 +51,7 @@ public class TpadenyCommand {
                 if (from == null) {
                     reqs.remove(req.from);
                 } else {
-                    accepts.add(Texts.bracketed(new LiteralText(from.getName().asString()).styled(style -> style
+                    accepts.add(Texts.bracketed(new LiteralText("").append(from.getDisplayName()).styled(style -> style
                             .withColor(Formatting.YELLOW)
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("/tpadeny " + from.getName().asString())))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpadeny " + from.getName().asString())))));
@@ -78,12 +78,12 @@ public class TpadenyCommand {
         if (req == null) {
             throw NO_TPA_FROM_EXCEPTION.create(target.getName().asString());
         }
-        logger.debug(String.format("[tpa][deny] %s -> %s", target.getName().asString(), player.getName().asString()));
+        logger.info(String.format("[tpa][deny] %s -> %s", target, player));
         req.setFinished();
         reqs.remove(req.from);
-        target.sendSystemMessage(new LiteralText("发送到 " + player.getName().asString() + " 的传送请求被拒绝")
+        target.sendSystemMessage(new LiteralText("发送到 ").append(player.getDisplayName()).append(Text.of(" 的传送请求被拒绝"))
                 .styled(style -> style.withColor(Formatting.RED)), Util.NIL_UUID);
-        source.sendFeedback(Text.of("已拒绝来自 " + target.getName().asString() + " 的传送请求"), false);
+        source.sendFeedback(new LiteralText("已拒绝来自 ").append(target.getDisplayName()).append(Text.of(" 的传送请求")), false);
         return 0;
     }
 }

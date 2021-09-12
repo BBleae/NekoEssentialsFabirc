@@ -11,5 +11,7 @@ public class CommandRegistry {
         TpacceptCommand.register(dispatcher);
         TpadenyCommand.register(dispatcher);
         HeadCommand.register(dispatcher);
+        HandCommand.register(dispatcher);
+        WarpCommand.register(dispatcher);
     }
 }

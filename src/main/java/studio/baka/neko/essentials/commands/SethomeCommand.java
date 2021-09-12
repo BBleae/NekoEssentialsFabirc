@@ -21,7 +21,7 @@ public class SethomeCommand {
         SavedLocation loc = new SavedLocation(world,
                 player.getX(), player.getY(), player.getZ(),
                 player.getYaw(), player.getPitch());
-        logger.debug(String.format("[home][set] %s -> %s", player.getName().asString(), loc.asFullString()));
+        logger.info(String.format("[home][set] %s -> %s", player, loc.asFullString()));
         ((IMixinServerPlayerEntity) player).setHomeLocation(loc);
         source.sendFeedback(Text.of("已成功在 " + loc.asString() + " 处设置家"), false);
         return 0;
