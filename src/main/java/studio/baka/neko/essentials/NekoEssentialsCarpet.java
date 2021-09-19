@@ -10,8 +10,10 @@ public class NekoEssentialsCarpet implements CarpetExtension {
         HUDController.register(server -> {
             server.getPlayerManager().getPlayerList().forEach(player -> {
                 HUDController.scarpet_headers.put(player.getEntityName(),
-                        new LiteralText("§b§m          §r §a[§eNekoCraft§a] §b§m          \n§aTelegram 群组: §7t.me/NekoCraft\n§aQQ 群: §77923309§r"));
-                HUDController.addMessage(player, new LiteralText("§b§m                                      §r"));
+                        new LiteralText("§3§m            §r §a[§6NekoCraft§a] §3§m            \n§7Telegram:§3@NekoCraft  §7QQ:§37923309§r"));
+                if (!HUDController.player_huds.containsKey(player))
+                    HUDController.addMessage(player, new LiteralText("§7使用 /log 监听的信息会显示在这里§r"));
+                HUDController.addMessage(player, new LiteralText("§3§m                                    §r"));
             });
         });
     }

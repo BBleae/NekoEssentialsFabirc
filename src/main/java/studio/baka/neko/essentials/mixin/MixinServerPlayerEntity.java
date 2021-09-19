@@ -76,11 +76,10 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
                 n.setFinished();
                 tpaReqds.remove(n.to);
                 ServerPlayerEntity to = this.getServerWorld().getServer().getPlayerManager().getPlayer(n.to);
-                if (to != null) {
-                    logger.info(String.format("[tpa][timeout] %s -> %s", this, to));
-                    this.sendSystemMessage(new LiteralText("发向 ").append(to.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
-                    to.sendSystemMessage(new LiteralText("来自 ").append(this.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
-                }
+                if (to == null) continue;
+                logger.info(String.format("[tpa][timeout] %s -> %s", this, to));
+                this.sendSystemMessage(new LiteralText("发向 ").append(to.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
+                to.sendSystemMessage(new LiteralText("来自 ").append(this.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
             }
         }
         for (TpaRequest n : tpaReqs.values()) {

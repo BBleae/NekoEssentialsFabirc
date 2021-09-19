@@ -18,5 +18,6 @@ public class CommandRegistry {
         SpawnCommand.register(dispatcher);
         AcceptruleCommand.register(dispatcher);
         DenyruleCommand.register(dispatcher);
+        TpahereCommand.register(dispatcher);
     }
 }

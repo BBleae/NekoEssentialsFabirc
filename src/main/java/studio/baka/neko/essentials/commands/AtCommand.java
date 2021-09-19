@@ -34,7 +34,7 @@ public class AtCommand {
                     new LiteralText("")
                             .append(new LiteralText("@").append(target.getDisplayName())
                                     .styled(style -> style.withColor(Formatting.GREEN)))
-                            .append(Text.of(" ")).append(message));
+                            .append(" ").append(message));
             source.getServer().getPlayerManager().broadcastChatMessage(text, MessageType.CHAT, player.getUuid());
             target.sendSystemMessage(new LiteralText("")
                             .append(new LiteralText("有一位叫 ").styled(style -> style.withColor(Formatting.GREEN)))

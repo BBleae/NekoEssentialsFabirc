@@ -79,8 +79,8 @@ public class TpacceptCommand {
         }
         logger.info(String.format("[tpa][accept] %s -> %s", target, player));
         req.execute();
-        target.sendSystemMessage(new LiteralText("发送到 ").append(player.getDisplayName()).append(Text.of(" 的传送请求已被接受")), Util.NIL_UUID);
-        source.sendFeedback(new LiteralText("已接受来自 ").append(target.getDisplayName()).append(Text.of(" 的传送请求")), false);
+        target.sendSystemMessage(new LiteralText("发送到 ").append(player.getDisplayName()).append(" 的传送请求已被接受"), Util.NIL_UUID);
+        source.sendFeedback(new LiteralText("已接受来自 ").append(target.getDisplayName()).append(" 的传送请求"), false);
         return 0;
     }
 }

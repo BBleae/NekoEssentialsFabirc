@@ -81,9 +81,9 @@ public class TpadenyCommand {
         logger.info(String.format("[tpa][deny] %s -> %s", target, player));
         req.setFinished();
         reqs.remove(req.from);
-        target.sendSystemMessage(new LiteralText("发送到 ").append(player.getDisplayName()).append(Text.of(" 的传送请求被拒绝"))
+        target.sendSystemMessage(new LiteralText("发送到 ").append(player.getDisplayName()).append(" 的传送请求被拒绝")
                 .styled(style -> style.withColor(Formatting.RED)), Util.NIL_UUID);
-        source.sendFeedback(new LiteralText("已拒绝来自 ").append(target.getDisplayName()).append(Text.of(" 的传送请求")), false);
+        source.sendFeedback(new LiteralText("已拒绝来自 ").append(target.getDisplayName()).append(" 的传送请求"), false);
         return 0;
     }
 }
