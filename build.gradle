@@ -11,6 +11,19 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+def urlFile = { url, name ->
+    File file = new File("$buildDir/download/${name}.jar")
+    file.parentFile.mkdirs()
+    if (!file.exists()) {
+        new URL(url).withInputStream { downloadStream ->
+            file.withOutputStream { fileOut ->
+                fileOut << downloadStream
+            }
+        }
+    }
+    files(file.absolutePath)
+}
+
 repositories {
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -47,9 +60,9 @@ dependencies {
     }
     modImplementation("carpet:fabric-carpet:${project.minecraft_version}-1.4.45+v210825")
 
-    modImplementation files("libs/fabric-permissions-api-v0.1.jar")
-    modImplementation files("libs/LuckPerms-Fabric-5.3.65.jar")
-    modImplementation files("libs/ledger-1.0.2.jar")
+    modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.1/fabric-permissions-api-v0.1.jar", "fabric-permissions-api-v0.1.jar")
+    modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/1367/artifact/fabric/build/libs/LuckPerms-Fabric-5.3.68.jar", "LuckPerms-Fabric-5.3.68.jar")
+    modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.0.2/ledger-1.0.2.jar", "ledger-1.0.2.jar")
 
     modCompileOnly "net.luckperms:api:5.3"
 }
