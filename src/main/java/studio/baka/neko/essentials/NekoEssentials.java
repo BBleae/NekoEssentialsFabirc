@@ -1,5 +1,6 @@
 package studio.baka.neko.essentials;
 
+import carpet.CarpetServer;
 import com.mojang.brigadier.CommandDispatcher;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -24,6 +25,10 @@ import studio.baka.neko.essentials.config.NekoConfig;
 import studio.baka.neko.essentials.config.NekoConfigParsed;
 
 public class NekoEssentials implements DedicatedServerModInitializer {
+    static {
+        CarpetServer.manageExtension(new NekoEssentialsCarpet());
+    }
+
     public static final Logger logger = LogManager.getLogger("NekoEssentials");
     public static NekoConfig rawConfig;
     public LuckPerms luckPermsApi;
@@ -65,14 +70,14 @@ public class NekoEssentials implements DedicatedServerModInitializer {
 
     private void onEndTick(MinecraftServer server) {
         if (server.getTicks() % 64 == 0) {
-            String message = "§bNekoCraft§r";
+            String message = "NekoCraft";
             switch (server.getTicks() / 64 % 2) {
                 case 0 -> {
                     ServerWorld overworld = server.getWorld(World.OVERWORLD);
                     if (overworld != null)
-                        message = "§b正在经历第" + overworld.getLevelProperties().getTime() + "个tick的NekoCraft§r";
+                        message = "正在经历第" + overworld.getLevelProperties().getTime() + "个tick的NekoCraft";
                 }
-                case 1 -> message = "§b正在与" + server.getPlayerManager().getCurrentPlayerCount() + "只猫猫玩耍的NekoCraft§r";
+                case 1 -> message = "正在与" + server.getPlayerManager().getCurrentPlayerCount() + "只猫猫玩耍的NekoCraft";
             }
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 player.networkHandler.sendPacket(new CustomPayloadS2CPacket(CustomPayloadS2CPacket.BRAND,

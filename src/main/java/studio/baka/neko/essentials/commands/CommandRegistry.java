@@ -14,5 +14,9 @@ public class CommandRegistry {
         HandCommand.register(dispatcher);
         WarpCommand.register(dispatcher);
         AtCommand.register(dispatcher);
+        BackCommand.register(dispatcher);
+        SpawnCommand.register(dispatcher);
+        AcceptruleCommand.register(dispatcher);
+        DenyruleCommand.register(dispatcher);
     }
 }

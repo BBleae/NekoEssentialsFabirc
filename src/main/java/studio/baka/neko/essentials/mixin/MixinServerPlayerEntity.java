@@ -1,6 +1,7 @@
 package studio.baka.neko.essentials.mixin;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -39,31 +40,30 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
 
     @Nullable
     private SavedLocation homeLocation;
+    @Nullable
+    private SavedLocation lastLocation;
+    private boolean acceptedRules = false;
     private final HashMap<UUID, TpaRequest> tpaReqs = new HashMap<>();
     private final HashMap<UUID, TpaRequest> tpaReqds = new HashMap<>();
 
     @Inject(method = "readCustomDataFromNbt", at = @At("RETURN"))
     public void afterReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains("homeLocation", 10)) {
-            NbtCompound nbtCompound = nbt.getCompound("homeLocation");
-            homeLocation = new SavedLocation(nbtCompound.getString("world"),
-                    nbtCompound.getDouble("x"), nbtCompound.getDouble("y"), nbtCompound.getDouble("z"),
-                    nbtCompound.getFloat("yaw"), nbtCompound.getFloat("pitch"));
-        }
+        if (nbt.contains("homeLocation", 10))
+            homeLocation = SavedLocation.formNBT(nbt.getCompound("homeLocation"));
+        if (nbt.contains("lastLocation", 10))
+            lastLocation = SavedLocation.formNBT(nbt.getCompound("lastLocation"));
+        if (nbt.contains("acceptedRules", 1))
+            acceptedRules = nbt.getBoolean("acceptedRules");
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("RETURN"))
     public void afterWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (homeLocation != null) {
-            NbtCompound nbtCompound = new NbtCompound();
-            nbtCompound.putString("world", homeLocation.world);
-            nbtCompound.putDouble("x", homeLocation.x);
-            nbtCompound.putDouble("y", homeLocation.y);
-            nbtCompound.putDouble("z", homeLocation.z);
-            nbtCompound.putFloat("yaw", homeLocation.yaw);
-            nbtCompound.putFloat("pitch", homeLocation.pitch);
-            nbt.put("homeLocation", nbtCompound);
-        }
+        if (homeLocation != null)
+            nbt.put("homeLocation", homeLocation.asNBT());
+        if (lastLocation != null)
+            nbt.put("lastLocation", lastLocation.asNBT());
+        if (acceptedRules)
+            nbt.putBoolean("acceptedRules", true);
     }
 
     @Inject(method = "tick", at = @At("RETURN"))
@@ -90,6 +90,12 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
         }
     }
 
+    @Inject(method = "onDeath", at = @At("RETURN"))
+    public void afterDeath(DamageSource source, CallbackInfo ci) {
+        lastLocation = new SavedLocation(this.getServerWorld().getRegistryKey().getValue().toString(),
+                this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
+    }
+
     @Override
     public @Nullable SavedLocation getHomeLocation() {
         return homeLocation;
@@ -98,6 +104,16 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
     @Override
     public void setHomeLocation(@Nullable SavedLocation i) {
         homeLocation = i;
+    }
+
+    @Override
+    public @Nullable SavedLocation getLastLocation() {
+        return lastLocation;
+    }
+
+    @Override
+    public void setLastLocation(@Nullable SavedLocation i) {
+        lastLocation = i;
     }
 
     public void requestedTpa(TpaRequest req) {
@@ -114,5 +130,13 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
 
     public HashMap<UUID, TpaRequest> getTpaReqds() {
         return tpaReqds;
+    }
+
+    public boolean getAcceptedRules() {
+        return acceptedRules;
+    }
+
+    public void setAcceptedRules(boolean i) {
+        acceptedRules = i;
     }
 }

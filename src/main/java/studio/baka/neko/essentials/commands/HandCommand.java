@@ -14,6 +14,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 
+import static studio.baka.neko.essentials.NekoEssentials.logger;
+
 public class HandCommand {
     private static final SimpleCommandExceptionType NO_ITEM_EXCEPTION =
             new SimpleCommandExceptionType(Text.of("请将要展示的物品放在主手"));
@@ -28,6 +30,7 @@ public class HandCommand {
         if (itemStack.isEmpty()) {
             throw NO_ITEM_EXCEPTION.create();
         }
+        logger.info(String.format("[hand] %s with %s", player, itemStack));
         MutableText text = new LiteralText("")
                 .append(player.getDisplayName())
                 .append(new LiteralText(" 向你展示了 " + itemStack.getCount() + " 个物品: ")

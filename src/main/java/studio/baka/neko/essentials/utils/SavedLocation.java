@@ -1,7 +1,6 @@
 package studio.baka.neko.essentials.utils;
 
-import net.minecraft.server.ServerConfigHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 
 public class SavedLocation {
     public final String world;
@@ -35,6 +34,12 @@ public class SavedLocation {
         }
     }
 
+    public static SavedLocation formNBT(NbtCompound nbt) {
+        return new SavedLocation(nbt.getString("world"),
+                nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"),
+                nbt.getFloat("yaw"), nbt.getFloat("pitch"));
+    }
+
     public String save() {
         return String.format("%s,%f,%f,%f,%f,%f", world, x, y, z, yaw, pitch);
     }
@@ -45,6 +50,17 @@ public class SavedLocation {
 
     public String asFullString() {
         return String.format("[%s, %f, %f, %f, %f, %f]", world, x, y, z, yaw, pitch);
+    }
+
+    public NbtCompound asNBT() {
+        NbtCompound nbtCompound = new NbtCompound();
+        nbtCompound.putString("world", this.world);
+        nbtCompound.putDouble("x", this.x);
+        nbtCompound.putDouble("y", this.y);
+        nbtCompound.putDouble("z", this.z);
+        nbtCompound.putFloat("yaw", this.yaw);
+        nbtCompound.putFloat("pitch", this.pitch);
+        return nbtCompound;
     }
 
 }

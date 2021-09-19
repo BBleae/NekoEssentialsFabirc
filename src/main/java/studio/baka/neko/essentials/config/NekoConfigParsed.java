@@ -1,10 +1,8 @@
 package studio.baka.neko.essentials.config;
 
-import me.shedaniel.autoconfig.ConfigData;
 import studio.baka.neko.essentials.utils.SavedLocation;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class NekoConfigParsed {
     public static HashMap<String, SavedLocation> warpPoints;

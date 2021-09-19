@@ -3,6 +3,7 @@ package studio.baka.neko.essentials.utils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Util;
+import studio.baka.neko.essentials.mixinInterfaces.IMixinServerPlayerEntity;
 
 import java.util.UUID;
 
@@ -40,6 +41,9 @@ public class TpaRequest {
             this.setFinished();
             return;
         }
+        ((IMixinServerPlayerEntity) from).setLastLocation(
+                new SavedLocation(from.getServerWorld().getRegistryKey().getValue().toString(),
+                        from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch()));
         from.teleport(to.getServerWorld(), to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch());
         this.setFinished();
     }

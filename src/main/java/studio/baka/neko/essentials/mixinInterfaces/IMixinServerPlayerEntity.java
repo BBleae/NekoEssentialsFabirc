@@ -12,6 +12,10 @@ public interface IMixinServerPlayerEntity {
 
     void setHomeLocation(@Nullable SavedLocation i);
 
+    @Nullable SavedLocation getLastLocation();
+
+    void setLastLocation(@Nullable SavedLocation i);
+
     void requestedTpa(TpaRequest req);
 
     void requestTpa(TpaRequest req);
@@ -19,4 +23,8 @@ public interface IMixinServerPlayerEntity {
     HashMap<UUID, TpaRequest> getTpaReqs();
 
     HashMap<UUID, TpaRequest> getTpaReqds();
+
+    boolean getAcceptedRules();
+
+    void setAcceptedRules(boolean i);
 }

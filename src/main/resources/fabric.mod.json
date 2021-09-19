@@ -32,7 +32,9 @@
     "fabric": "*",
     "minecraft": "1.17.x",
     "java": ">=16",
-    "luckperms": ">=5.3"
+    "luckperms": ">=5.3",
+    "cloth-config2": ">=5.0",
+    "carpet": ">=1.4"
   },
   "suggests": {
   }

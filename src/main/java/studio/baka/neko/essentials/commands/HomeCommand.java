@@ -20,7 +20,7 @@ import static studio.baka.neko.essentials.NekoEssentials.logger;
 
 public class HomeCommand {
     private static final SimpleCommandExceptionType NO_HOME_EXCEPTION =
-            new SimpleCommandExceptionType(Text.of("no home"));
+            new SimpleCommandExceptionType(Text.of("你还没有设置过家"));
     private static final DynamicCommandExceptionType INVALID_DIMENSION_EXCEPTION =
             new DynamicCommandExceptionType((id) -> Text.of("invalid home dimension: " + id));
 
@@ -32,14 +32,18 @@ public class HomeCommand {
     private static int execute(ServerCommandSource source, ServerPlayerEntity player) throws CommandSyntaxException {
         SavedLocation loc = ((IMixinServerPlayerEntity) player).getHomeLocation();
         if (loc == null) throw NO_HOME_EXCEPTION.create();
+
         RegistryKey<World> registryKey = RegistryKey.of(Registry.WORLD_KEY, new Identifier(loc.world));
         ServerWorld serverWorld = source.getServer().getWorld(registryKey);
-        if (serverWorld == null) {
-            throw INVALID_DIMENSION_EXCEPTION.create(loc.world);
-        }
+        if (serverWorld == null) throw INVALID_DIMENSION_EXCEPTION.create(loc.world);
+
         logger.info(String.format("[home][teleport] %s -> %s", player, loc.asFullString()));
+        ((IMixinServerPlayerEntity) player).setLastLocation(
+                new SavedLocation(player.getServerWorld().getRegistryKey().getValue().toString(),
+                        player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch()));
         player.teleport(serverWorld, loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
         source.sendFeedback(Text.of("已传送到家"), false);
+
         return 0;
     }
 }

@@ -4,8 +4,9 @@
   "package": "studio.baka.neko.essentials.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "MixinPlayerManager",
     "MixinServerPlayerEntity",
-    "MixinPlayerManager"
+    "MixinServerPlayNetworkHandler"
   ],
   "client": [
   ],
