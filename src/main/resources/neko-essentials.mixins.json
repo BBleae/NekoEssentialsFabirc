@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "MixinPlayerManager",
+    "MixinPlayerManagerAccessor",
     "MixinServerPlayerEntity",
-    "MixinServerPlayNetworkHandler"
+    "MixinServerPlayNetworkHandler",
+    "MixinWorldSaveHandler"
   ],
   "client": [
   ],
