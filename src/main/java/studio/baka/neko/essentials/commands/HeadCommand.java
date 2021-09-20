@@ -7,14 +7,13 @@ import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.command.argument.ItemStackArgument;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import static studio.baka.neko.essentials.NekoEssentials.logger;
 
@@ -31,7 +30,7 @@ public class HeadCommand {
     private static int execute(ServerCommandSource source, ServerPlayerEntity player, GameProfile profile) throws CommandSyntaxException {
         NbtCompound nbt = new NbtCompound();
         nbt.putString("SkullOwner", profile.getName());
-        ItemStackArgument item = new ItemStackArgument(Registry.ITEM.get(new Identifier("minecraft:player_head")), nbt);
+        ItemStackArgument item = new ItemStackArgument(Items.PLAYER_HEAD, nbt);
         ItemStack itemStack = item.createStack(1, false);
         logger.info(String.format("[head] %s with %s's skull", player, profile.getName()));
         boolean bl = player.getInventory().insertStack(itemStack);

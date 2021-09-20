@@ -19,5 +19,7 @@ public class CommandRegistry {
         AcceptruleCommand.register(dispatcher);
         DenyruleCommand.register(dispatcher);
         TpahereCommand.register(dispatcher);
+        HatCommand.register(dispatcher);
+        OpeninvCommand.register(dispatcher);
     }
 }

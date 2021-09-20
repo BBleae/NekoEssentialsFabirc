@@ -12,7 +12,6 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
 
 import static studio.baka.neko.essentials.NekoEssentials.logger;
 
@@ -26,10 +25,10 @@ public class HandCommand {
     }
 
     private static int execute(ServerCommandSource source, ServerPlayerEntity player) throws CommandSyntaxException {
-        ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (itemStack.isEmpty()) {
+        ItemStack itemStack = player.getMainHandStack();
+        if (itemStack.isEmpty())
             throw NO_ITEM_EXCEPTION.create();
-        }
+
         logger.info(String.format("[hand] %s with %s", player, itemStack));
         MutableText text = new LiteralText("")
                 .append(player.getDisplayName())
