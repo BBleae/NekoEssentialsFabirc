@@ -13,7 +13,6 @@ public class CommandRegistry {
         HeadCommand.register(dispatcher);
         HandCommand.register(dispatcher);
         WarpCommand.register(dispatcher);
-        AtCommand.register(dispatcher);
         BackCommand.register(dispatcher);
         AcceptruleCommand.register(dispatcher);
         DenyruleCommand.register(dispatcher);
