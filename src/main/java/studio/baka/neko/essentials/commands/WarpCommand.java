@@ -11,12 +11,17 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import studio.baka.neko.essentials.config.NekoConfigParsed;
 import studio.baka.neko.essentials.mixinInterfaces.IMixinServerPlayerEntity;
 import studio.baka.neko.essentials.utils.SavedLocation;
+
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static studio.baka.neko.essentials.NekoEssentials.logger;
 
@@ -29,13 +34,27 @@ public class WarpCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("warp")
                 .then(CommandManager.argument("target", StringArgumentType.word())
-                        .suggests(((context, builder) ->
-                                CommandSource.suggestMatching(NekoConfigParsed.warpPoints.keySet(), builder)))
+                        .suggests((context, builder) -> CommandSource.suggestMatching(
+                                Stream.concat(NekoConfigParsed.warpPoints.keySet().stream(), Stream.of("spawn"))
+                                        .collect(Collectors.toSet()), builder))
                         .executes((context) -> execute(context.getSource(), context.getSource().getPlayer(),
                                 StringArgumentType.getString(context, "target")))));
     }
 
     private static int execute(ServerCommandSource source, ServerPlayerEntity player, String name) throws CommandSyntaxException {
+        if (Objects.equals(name, "spawn")) {
+            ServerWorld overworld = source.getServer().getOverworld();
+            BlockPos pos = overworld.getSpawnPos();
+
+            logger.info(String.format("[warp] %s -> %s (%s)", player, name, pos));
+            ((IMixinServerPlayerEntity) player).setLastLocation(
+                    new SavedLocation(player.getServerWorld().getRegistryKey().getValue().toString(),
+                            player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch()));
+            player.teleport(overworld, pos.getX(), pos.getY(), pos.getZ(), 0, 0);
+
+            return 0;
+        }
+
         SavedLocation loc = NekoConfigParsed.warpPoints.get(name);
         if (loc == null) throw INVALID_WARP_POINT_EXCEPTION.create(name);
 
