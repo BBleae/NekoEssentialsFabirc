@@ -50,7 +50,7 @@ public class TpahereCommand {
         ((IMixinServerPlayerEntity) target).requestTpa(req);
         logger.info(String.format("[tpahere][send] %s -> %s", player, target));
 
-        target.sendSystemMessage(new LiteralText("").append(target.getDisplayName()).append(" 想要你传送到他的位置  ")
+        target.sendSystemMessage(new LiteralText("").append(player.getDisplayName()).append(" 想要你传送到他的位置  ")
                 .append(new LiteralText("[接受]").styled(style -> style.withColor(Formatting.AQUA)
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("/tpaccept " + player.getName().asString())))
                         .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + player.getName().asString()))))

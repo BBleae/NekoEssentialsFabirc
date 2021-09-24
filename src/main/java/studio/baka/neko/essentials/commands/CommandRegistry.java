@@ -19,5 +19,6 @@ public class CommandRegistry {
         TpahereCommand.register(dispatcher);
         HatCommand.register(dispatcher);
         OpeninvCommand.register(dispatcher);
+        OpenenderCommand.register(dispatcher);
     }
 }

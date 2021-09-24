@@ -22,6 +22,7 @@ import studio.baka.neko.essentials.utils.SavedLocation;
 import studio.baka.neko.essentials.utils.TpaRequest;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 
 import static studio.baka.neko.essentials.NekoEssentials.logger;
@@ -69,30 +70,35 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
     @Inject(method = "tick", at = @At("RETURN"))
     public void afterTick(CallbackInfo ci) {
         long now = Util.getMeasuringTimeMs();
-        for (TpaRequest n : tpaReqds.values()) {
+        Iterator<TpaRequest> iterator = tpaReqds.values().iterator();
+        while (iterator.hasNext()) {
+            TpaRequest n = iterator.next();
             if (n.finished) {
-                tpaReqds.remove(n.to);
+                iterator.remove();
             } else if (n.reqTime + 30 * 1000L < now) {
                 n.setFinished();
-                tpaReqds.remove(n.to);
+                iterator.remove();
                 ServerPlayerEntity to = this.getServerWorld().getServer().getPlayerManager().getPlayer(n.to);
                 if (to == null) continue;
                 logger.info(String.format("[tpa][timeout] %s -> %s", this, to));
-                this.sendSystemMessage(new LiteralText("发向 ").append(to.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
-                to.sendSystemMessage(new LiteralText("来自 ").append(this.getDisplayName()).append("的传送请求已超时"), Util.NIL_UUID);
+                this.sendSystemMessage(new LiteralText("发向 ").append(to.getDisplayName()).append(" 的传送请求已超时"), Util.NIL_UUID);
+                to.sendSystemMessage(new LiteralText("来自 ").append(this.getDisplayName()).append(" 的传送请求已超时"), Util.NIL_UUID);
             }
         }
-        for (TpaRequest n : tpaReqs.values()) {
-            if (n.finished) {
-                tpaReqs.remove(n.from);
-            }
-        }
+        tpaReqs.values().removeIf(n -> n.finished);
     }
 
     @Inject(method = "onDeath", at = @At("RETURN"))
     public void afterDeath(DamageSource source, CallbackInfo ci) {
         lastLocation = new SavedLocation(this.getServerWorld().getRegistryKey().getValue().toString(),
                 this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
+    }
+
+    @Inject(method = "copyFrom", at = @At("TAIL"))
+    public void afterCopyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        this.acceptedRules = ((IMixinServerPlayerEntity) oldPlayer).getAcceptedRules();
+        this.lastLocation = ((IMixinServerPlayerEntity) oldPlayer).getLastLocation();
+        this.homeLocation = ((IMixinServerPlayerEntity) oldPlayer).getHomeLocation();
     }
 
     @Override

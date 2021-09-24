@@ -62,7 +62,7 @@ dependencies {
 
     modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.1/fabric-permissions-api-v0.1.jar", "fabric-permissions-api-v0.1.jar")
     modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/1367/artifact/fabric/build/libs/LuckPerms-Fabric-5.3.68.jar", "LuckPerms-Fabric-5.3.68.jar")
-    modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.0.2/ledger-1.0.2.jar", "ledger-1.0.2.jar")
+    modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/1.1.0/ledger-1.1.0.jar", "ledger-1.1.0.jar")
 
     modCompileOnly "net.luckperms:api:5.3"
 }
