@@ -48,7 +48,7 @@ public class WarpCommand {
 
             logger.info(String.format("[warp] %s -> %s (%s)", player, name, pos));
             ((IMixinServerPlayerEntity) player).setLastLocation(
-                    new SavedLocation(player.getServerWorld().getRegistryKey().getValue().toString(),
+                    new SavedLocation(player.getWorld().getRegistryKey().getValue().toString(),
                             player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch()));
             player.teleport(overworld, pos.getX(), pos.getY(), pos.getZ(), 0, 0);
 
@@ -64,7 +64,7 @@ public class WarpCommand {
 
         logger.info(String.format("[warp] %s -> %s (%s)", player, name, loc.asFullString()));
         ((IMixinServerPlayerEntity) player).setLastLocation(
-                new SavedLocation(player.getServerWorld().getRegistryKey().getValue().toString(),
+                new SavedLocation(player.getWorld().getRegistryKey().getValue().toString(),
                         player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch()));
         player.teleport(serverWorld, loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
         source.sendFeedback(Text.of("已传送到路径点 " + name), false);

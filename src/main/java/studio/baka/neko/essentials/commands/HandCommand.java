@@ -35,7 +35,7 @@ public class HandCommand {
                 .append(new LiteralText(" 向你展示了 " + itemStack.getCount() + " 个物品: ")
                         .styled(style -> style.withColor(Formatting.GRAY)))
                 .append(itemStack.toHoverableText());
-        source.getServer().getPlayerManager().broadcastChatMessage(text, MessageType.CHAT, player.getUuid());
+        source.getServer().getPlayerManager().broadcast(text, MessageType.CHAT, player.getUuid());
         return 0;
     }
 }

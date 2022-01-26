@@ -37,7 +37,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
     public abstract void sendSystemMessage(Text message, UUID sender);
 
     @Shadow
-    public abstract ServerWorld getServerWorld();
+    public abstract ServerWorld getWorld();
 
     @Nullable
     private SavedLocation homeLocation;
@@ -78,7 +78,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
             } else if (n.reqTime + 30 * 1000L < now) {
                 n.setFinished();
                 iterator.remove();
-                ServerPlayerEntity to = this.getServerWorld().getServer().getPlayerManager().getPlayer(n.to);
+                ServerPlayerEntity to = this.getWorld().getServer().getPlayerManager().getPlayer(n.to);
                 if (to == null) continue;
                 logger.info(String.format("[tpa][timeout] %s -> %s", this, to));
                 this.sendSystemMessage(new LiteralText("发向 ").append(to.getDisplayName()).append(" 的传送请求已超时"), Util.NIL_UUID);
@@ -90,7 +90,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
 
     @Inject(method = "onDeath", at = @At("RETURN"))
     public void afterDeath(DamageSource source, CallbackInfo ci) {
-        lastLocation = new SavedLocation(this.getServerWorld().getRegistryKey().getValue().toString(),
+        lastLocation = new SavedLocation(this.getWorld().getRegistryKey().getValue().toString(),
                 this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
     }
 

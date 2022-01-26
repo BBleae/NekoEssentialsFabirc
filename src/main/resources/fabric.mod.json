@@ -5,7 +5,8 @@
   "name": "Neko Essentials (Fabirc)",
   "description": "NekoEssentials in Fabric",
   "authors": [
-    "QiroNT"
+    "QiroNT",
+    "HarukawaSayaka"
   ],
   "contact": {
     "homepage": "https://neko-craft.com/",
@@ -28,10 +29,10 @@
     "neko-essentials.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "1.17.x",
-    "java": ">=16",
+    "minecraft": "1.18.x",
+    "java": ">=17",
     "luckperms": ">=5.3",
     "cloth-config2": ">=5.0",
     "carpet": ">=1.4"

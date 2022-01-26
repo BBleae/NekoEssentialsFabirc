@@ -76,7 +76,7 @@ public abstract class MixinServerPlayNetworkHandler {
         }
     }
 
-    @Inject(method = "onGameMessage", at = @At(value = "INVOKE", target = "Ljava/lang/String;startsWith(Ljava/lang/String;)Z", shift = At.Shift.BEFORE), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(method = "onChatMessage", at = @At(value = "INVOKE", target = "Ljava/lang/String;startsWith(Ljava/lang/String;)Z", shift = At.Shift.BEFORE), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     public void beforePlayerSendMessage(ChatMessageC2SPacket packet, CallbackInfo ci, String string) {
         if (!((IMixinServerPlayerEntity) player).getAcceptedRules() &&
                 !Objects.equals(string, "/acceptrule") && !Objects.equals(string, "/denyrule")) {

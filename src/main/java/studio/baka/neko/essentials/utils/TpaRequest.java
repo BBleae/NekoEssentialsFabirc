@@ -49,14 +49,14 @@ public class TpaRequest {
         }
         if (!this.here) {
             ((IMixinServerPlayerEntity) from).setLastLocation(
-                    new SavedLocation(from.getServerWorld().getRegistryKey().getValue().toString(),
+                    new SavedLocation(from.getWorld().getRegistryKey().getValue().toString(),
                             from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch()));
-            from.teleport(to.getServerWorld(), to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch());
+            from.teleport(to.getWorld(), to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch());
         } else {
             ((IMixinServerPlayerEntity) to).setLastLocation(
-                    new SavedLocation(to.getServerWorld().getRegistryKey().getValue().toString(),
+                    new SavedLocation(to.getWorld().getRegistryKey().getValue().toString(),
                             to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch()));
-            to.teleport(from.getServerWorld(), from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch());
+            to.teleport(from.getWorld(), from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch());
         }
         this.setFinished();
     }

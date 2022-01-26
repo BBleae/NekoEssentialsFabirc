@@ -39,7 +39,7 @@ public class HomeCommand {
 
         logger.info(String.format("[home][teleport] %s -> %s", player, loc.asFullString()));
         ((IMixinServerPlayerEntity) player).setLastLocation(
-                new SavedLocation(player.getServerWorld().getRegistryKey().getValue().toString(),
+                new SavedLocation(player.getWorld().getRegistryKey().getValue().toString(),
                         player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch()));
         player.teleport(serverWorld, loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
         source.sendFeedback(Text.of("已传送到家"), false);

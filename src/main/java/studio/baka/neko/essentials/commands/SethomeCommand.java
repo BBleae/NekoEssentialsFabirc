@@ -17,7 +17,7 @@ public class SethomeCommand {
     }
 
     private static int execute(ServerCommandSource source, ServerPlayerEntity player) {
-        String world = player.getServerWorld().getRegistryKey().getValue().toString();
+        String world = player.getWorld().getRegistryKey().getValue().toString();
         SavedLocation loc = new SavedLocation(world,
                 player.getX(), player.getY(), player.getZ(),
                 player.getYaw(), player.getPitch());

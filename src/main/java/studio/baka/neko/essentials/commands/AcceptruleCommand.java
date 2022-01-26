@@ -27,7 +27,7 @@ public class AcceptruleCommand {
         source.sendFeedback(new LiteralText("感谢您接受了服务器的规定, 同时也希望您能一直遵守规定!")
                 .styled(style -> style.withColor(Formatting.GREEN)), false);
         player.getInventory().offerOrDrop(new ItemStack(Registry.ITEM.get(new Identifier("minecraft:cooked_beef")), 64));
-        source.getServer().getPlayerManager().broadcastChatMessage(new LiteralText("")
+        source.getServer().getPlayerManager().broadcast(new LiteralText("")
                         .append(new LiteralText("欢迎新玩家 ").styled(style -> style.withColor(Formatting.AQUA)))
                         .append(player.getDisplayName())
                         .append(new LiteralText(" 加入服务器!").styled(style -> style.withColor(Formatting.AQUA))),
