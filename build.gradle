@@ -58,7 +58,7 @@ dependencies {
 	modImplementation("carpet:fabric-carpet:${project.minecraft_version}-1.4.57+v220119")
 
 	modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.1/fabric-permissions-api-v0.1.jar", "fabric-permissions-api-v0.1.jar")
-	modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/1398/artifact/fabric/build/libs/LuckPerms-Fabric-5.3.98.jar", "LuckPerms-Fabric-5.3.98.jar")
+	modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/lastSuccessfulBuild/artifact/fabric/build/libs/LuckPerms-Fabric-5.4.9.jar", "LuckPerms-Fabric-5.4.9.jar")
 	modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.2.0/ledger-1.2.0.jar", "ledger-1.2.0.jar")
 
 	modCompileOnly "net.luckperms:api:5.3"
