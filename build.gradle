@@ -1,7 +1,7 @@
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.6.10'
-	id 'fabric-loom' version '0.11-SNAPSHOT'
-	id 'maven-publish'
+    // id 'org.jetbrains.kotlin.jvm' version '1.6.20-RC'
+    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'maven-publish'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -12,99 +12,112 @@ version = project.mod_version
 group = project.maven_group
 
 def urlFile = { url, name ->
-	File file = new File("$buildDir/download/${name}.jar")
-	file.parentFile.mkdirs()
-	if (!file.exists()) {
-		new URL(url).withInputStream { downloadStream ->
-			file.withOutputStream { fileOut ->
-				fileOut << downloadStream
-			}
-		}
-	}
-	files(file.absolutePath)
+    File file = new File("$buildDir/download/${name}.jar")
+    file.parentFile.mkdirs()
+    if (!file.exists()) {
+        new URL(url).withInputStream { downloadStream ->
+            file.withOutputStream { fileOut ->
+                fileOut << downloadStream
+            }
+        }
+    }
+    files(file.absolutePath)
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-	mavenCentral()
-	maven { url "https://maven.shedaniel.me/" }
-	maven {
-		url "https://maven.terraformersmc.com/releases/"
-		content {
-			includeGroup "com.terraformersmc"
-		}
-	}
-	maven { url 'https://masa.dy.fi/maven' }
+    // Add repositories to retrieve artifacts from in here.
+    // You should only use this when depending on other mods because
+    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+    // for more information about repositories.
+    mavenCentral()
+    maven { url "https://maven.shedaniel.me/" }
+    maven {
+        url "https://maven.terraformersmc.com/releases/"
+        content {
+            includeGroup "com.terraformersmc"
+        }
+    }
+    maven { url 'https://masa.dy.fi/maven' }
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // To change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:1.7.1+kotlin.1.6.10"
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // modImplementation "net.fabricmc:fabric-language-kotlin:1.7.1+kotlin.1.6.10"
 
-	modImplementation "com.terraformersmc:modmenu:3.0.1"
-	modImplementation("me.shedaniel.cloth:cloth-config-fabric:6.1.48") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	modImplementation("carpet:fabric-carpet:${project.minecraft_version}-1.4.57+v220119")
+    // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
+    // You may need to force-disable transitiveness on them.
 
-	modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.1/fabric-permissions-api-v0.1.jar", "fabric-permissions-api-v0.1.jar")
-	modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/lastSuccessfulBuild/artifact/fabric/build/libs/LuckPerms-Fabric-5.4.9.jar", "LuckPerms-Fabric-5.4.9.jar")
-	modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.2.0/ledger-1.2.0.jar", "ledger-1.2.0.jar")
+    modImplementation "com.terraformersmc:modmenu:3.1.0"
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:6.2.57") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    modImplementation("carpet:fabric-carpet:${project.minecraft_version}-1.4.66+v220228")
 
-	modCompileOnly "net.luckperms:api:5.3"
+    modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.1/fabric-permissions-api-v0.1.jar", "fabric-permissions-api-v0.1.jar")
+    modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/lastSuccessfulBuild/artifact/fabric/build/libs/LuckPerms-Fabric-5.4.9.jar", "LuckPerms-Fabric-5.4.9.jar")
+    modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.2.4/ledger-1.2.4.jar", "ledger-1.2.4.jar")
+
+    modCompileOnly 'net.luckperms:api:5.4'
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
 
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+    // Minecraft 1.18 upwards uses Java 17.
+    it.options.release = 17
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+    }
 }

@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.util.Util;
 import net.minecraft.world.WorldSaveHandler;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -16,13 +17,10 @@ import java.io.File;
 
 @Mixin(WorldSaveHandler.class)
 public abstract class MixinWorldSaveHandler implements IMixinWorldSaveHandler {
+    private static final Logger LOGGER = LogManager.getLogger("NekoEssentials");
     @Shadow
     @Final
     private File playerDataDir;
-
-    @Shadow
-    @Final
-    private static Logger LOGGER;
 
     @Nullable
     public NbtCompound loadPlayerData(GameProfile profile) {

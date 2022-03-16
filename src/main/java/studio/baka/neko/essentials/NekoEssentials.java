@@ -25,12 +25,13 @@ import studio.baka.neko.essentials.config.NekoConfig;
 import studio.baka.neko.essentials.config.NekoConfigParsed;
 
 public class NekoEssentials implements DedicatedServerModInitializer {
+    public static final Logger logger = LogManager.getLogger("NekoEssentials");
+    public static NekoConfig rawConfig;
+
     static {
         CarpetServer.manageExtension(new NekoEssentialsCarpet());
     }
 
-    public static final Logger logger = LogManager.getLogger("NekoEssentials");
-    public static NekoConfig rawConfig;
     public LuckPerms luckPermsApi;
 
     @Override

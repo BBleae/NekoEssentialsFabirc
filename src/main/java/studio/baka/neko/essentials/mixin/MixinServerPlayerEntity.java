@@ -29,6 +29,14 @@ import static studio.baka.neko.essentials.NekoEssentials.logger;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class MixinServerPlayerEntity extends PlayerEntity implements IMixinServerPlayerEntity {
+    private final HashMap<UUID, TpaRequest> tpaReqs = new HashMap<>();
+    private final HashMap<UUID, TpaRequest> tpaReqds = new HashMap<>();
+    @Nullable
+    private SavedLocation homeLocation;
+    @Nullable
+    private SavedLocation lastLocation;
+    private boolean acceptedRules = false;
+
     public MixinServerPlayerEntity(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
     }
@@ -38,14 +46,6 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
 
     @Shadow
     public abstract ServerWorld getWorld();
-
-    @Nullable
-    private SavedLocation homeLocation;
-    @Nullable
-    private SavedLocation lastLocation;
-    private boolean acceptedRules = false;
-    private final HashMap<UUID, TpaRequest> tpaReqs = new HashMap<>();
-    private final HashMap<UUID, TpaRequest> tpaReqds = new HashMap<>();
 
     @Inject(method = "readCustomDataFromNbt", at = @At("RETURN"))
     public void afterReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {

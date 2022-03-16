@@ -8,9 +8,9 @@ import studio.baka.neko.essentials.mixinInterfaces.IMixinServerPlayerEntity;
 import java.util.UUID;
 
 public class TpaRequest {
-    private final MinecraftServer server;
     public final UUID from;
     public final UUID to;
+    private final MinecraftServer server;
     public long reqTime;
     public boolean finished = false;
     public boolean here;

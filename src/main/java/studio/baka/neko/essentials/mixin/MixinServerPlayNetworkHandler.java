@@ -32,20 +32,18 @@ import java.util.Objects;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public abstract class MixinServerPlayNetworkHandler {
+    private final HashSet<String> notified = new HashSet<>();
     @Shadow
     public ServerPlayerEntity player;
+    @Shadow
+    @Final
+    private MinecraftServer server;
 
     @Shadow
     public abstract void requestTeleport(double x, double y, double z, float yaw, float pitch);
 
     @Shadow
     public abstract void sendPacket(Packet<?> packet);
-
-    @Shadow
-    @Final
-    private MinecraftServer server;
-
-    private final HashSet<String> notified = new HashSet<>();
 
     @Inject(method = "onPlayerMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/server/world/ServerWorld;)V", shift = At.Shift.AFTER), cancellable = true)
     public void beforePlayerMove(PlayerMoveC2SPacket packet, CallbackInfo ci) {
@@ -90,7 +88,8 @@ public abstract class MixinServerPlayNetworkHandler {
         notified.clear();
     }
 
-    @Redirect(method = "handleMessage", at = @At(value = "NEW", target = "Lnet/minecraft/text/TranslatableText;"))
+    // TODO: fix "Unable to locate class mapping for @At(NEW.<target>) 'V'"
+    @Redirect(method = "handleMessage", at = @At(value = "NEW", target = "Lnet/minecraft/text/TranslatableText;<init>(Ljava/lang/String;[Ljava/lang/Object;)V"))
     public TranslatableText onHandleMessageNewTranslatableText(String key, Object... args) {
         if (!Objects.equals(key, "chat.type.text")) return new TranslatableText(key, args);
 
