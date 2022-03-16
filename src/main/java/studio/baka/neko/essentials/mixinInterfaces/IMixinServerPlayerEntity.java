@@ -27,4 +27,8 @@ public interface IMixinServerPlayerEntity {
     boolean getAcceptedRules();
 
     void setAcceptedRules(boolean i);
+
+    @Nullable SavedLocation getToggleLocation();
+
+    void setToggleLocation(@Nullable SavedLocation i);
 }

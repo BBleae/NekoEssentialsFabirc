@@ -35,6 +35,8 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
     private SavedLocation homeLocation;
     @Nullable
     private SavedLocation lastLocation;
+    @Nullable
+    private SavedLocation toggleLocation;
     private boolean acceptedRules = false;
 
     public MixinServerPlayerEntity(World world, BlockPos pos, float yaw, GameProfile profile) {
@@ -53,6 +55,8 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
             homeLocation = SavedLocation.formNBT(nbt.getCompound("homeLocation"));
         if (nbt.contains("lastLocation", 10))
             lastLocation = SavedLocation.formNBT(nbt.getCompound("lastLocation"));
+        if (nbt.contains("toggleLocation", 10))
+            lastLocation = SavedLocation.formNBT(nbt.getCompound("toggleLocation"));
         if (nbt.contains("acceptedRules", 1))
             acceptedRules = nbt.getBoolean("acceptedRules");
     }
@@ -63,6 +67,8 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
             nbt.put("homeLocation", homeLocation.asNBT());
         if (lastLocation != null)
             nbt.put("lastLocation", lastLocation.asNBT());
+        if (toggleLocation != null)
+            nbt.put("toggleLocation", toggleLocation.asNBT());
         if (acceptedRules)
             nbt.putBoolean("acceptedRules", true);
     }
@@ -99,6 +105,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
         this.acceptedRules = ((IMixinServerPlayerEntity) oldPlayer).getAcceptedRules();
         this.lastLocation = ((IMixinServerPlayerEntity) oldPlayer).getLastLocation();
         this.homeLocation = ((IMixinServerPlayerEntity) oldPlayer).getHomeLocation();
+        this.toggleLocation = ((IMixinServerPlayerEntity) oldPlayer).getToggleLocation();
     }
 
     @Override
@@ -109,6 +116,16 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IM
     @Override
     public void setHomeLocation(@Nullable SavedLocation i) {
         homeLocation = i;
+    }
+
+    @Override
+    public @Nullable SavedLocation getToggleLocation() {
+        return toggleLocation;
+    }
+
+    @Override
+    public void setToggleLocation(@Nullable SavedLocation i) {
+        toggleLocation = i;
     }
 
     @Override

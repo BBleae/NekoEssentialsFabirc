@@ -5,6 +5,7 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class CommandRegistry {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+        ToggleCommand.register(dispatcher);
         SethomeCommand.register(dispatcher);
         HomeCommand.register(dispatcher);
         TpaCommand.register(dispatcher);

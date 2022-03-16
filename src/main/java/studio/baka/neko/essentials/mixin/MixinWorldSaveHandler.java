@@ -5,8 +5,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.util.Util;
 import net.minecraft.world.WorldSaveHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,9 +13,10 @@ import studio.baka.neko.essentials.mixinInterfaces.IMixinWorldSaveHandler;
 
 import java.io.File;
 
+import static studio.baka.neko.essentials.NekoEssentials.logger;
+
 @Mixin(WorldSaveHandler.class)
 public abstract class MixinWorldSaveHandler implements IMixinWorldSaveHandler {
-    private static final Logger LOGGER = LogManager.getLogger("NekoEssentials");
     @Shadow
     @Final
     private File playerDataDir;
@@ -31,7 +30,7 @@ public abstract class MixinWorldSaveHandler implements IMixinWorldSaveHandler {
                 nbtCompound = NbtIo.readCompressed(file);
             }
         } catch (Exception var4) {
-            LOGGER.warn("Failed to load player data for {}", profile.getName());
+            logger.warn("Failed to load player data for {}", profile.getName());
         }
         return nbtCompound;
     }
@@ -44,7 +43,7 @@ public abstract class MixinWorldSaveHandler implements IMixinWorldSaveHandler {
             File file3 = new File(this.playerDataDir, profile.getId() + ".dat_old");
             Util.backupAndReplace(file2, file, file3);
         } catch (Exception var6) {
-            LOGGER.warn("Failed to save player data for {}", profile.getName());
+            logger.warn("Failed to save player data for {}", profile.getName());
         }
     }
 }
