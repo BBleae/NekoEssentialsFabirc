@@ -89,7 +89,7 @@ public abstract class MixinServerPlayNetworkHandler {
     }
 
     // TODO: fix "Unable to locate class mapping for @At(NEW.<target>) 'V'"
-    @Redirect(method = "handleMessage", at = @At(value = "NEW", target = "Lnet/minecraft/text/TranslatableText;<init>(Ljava/lang/String;[Ljava/lang/Object;)V"))
+    @Redirect(method = "handleMessage", at = @At(value = "NEW", target = "Lnet/minecraft/text/TranslatableText;"))
     public TranslatableText onHandleMessageNewTranslatableText(String key, Object... args) {
         if (!Objects.equals(key, "chat.type.text")) return new TranslatableText(key, args);
 
