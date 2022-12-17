@@ -1,6 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
-    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'fabric-loom' version '1.0-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -49,20 +49,22 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "net.fabricmc:fabric-language-kotlin:1.7.1+kotlin.1.6.10"
+
+    // Kotlin Support
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.8.7+kotlin.1.7.22"
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 
-    modImplementation "com.terraformersmc:modmenu:3.1.0"
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:6.2.57") {
+    modImplementation "com.terraformersmc:modmenu:5.0.2"
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:9.0.94") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modImplementation("carpet:fabric-carpet:${project.minecraft_version}-1.4.66+v220228")
+    modImplementation("carpet:fabric-carpet:${project.minecraft_version}-1.4.91+v221207")
 
-    modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.1/fabric-permissions-api-v0.1.jar", "fabric-permissions-api-v0.1.jar")
-    modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/lastSuccessfulBuild/artifact/fabric/build/libs/LuckPerms-Fabric-5.4.9.jar", "LuckPerms-Fabric-5.4.9.jar")
-    modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.2.4/ledger-1.2.4.jar", "ledger-1.2.4.jar")
+    modImplementation urlFile("https://github.com/lucko/fabric-permissions-api/releases/download/v0.2/fabric-permissions-api-v0.2.jar", "fabric-permissions-api-v0.2.jar")
+    modImplementation urlFile("https://ci.lucko.me/job/LuckPerms/lastSuccessfulBuild/artifact/fabric/build/libs/LuckPerms-Fabric-5.4.55.jar", "LuckPerms-Fabric-5.4.55.jar")
+    modImplementation urlFile("https://github.com/QuiltServerTools/Ledger/releases/download/v1.2.6/ledger-1.2.6.jar", "ledger-1.2.6.jar")
 
     modCompileOnly 'net.luckperms:api:5.4'
 }
